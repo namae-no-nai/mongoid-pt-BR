@@ -1,0 +1,342 @@
+pt-BR:
+  mongoid:
+    errors:
+      messages:
+        blank_in_locale: "não pode estar em branco em %{location}"
+        message_title: 'mensagem'
+        summary_title: 'resumo'
+        resolution_title: 'resolução'
+        ambiguous_relationship:
+          message: "Relações ambíguas %{candidates} definidas em %{klass}."
+          summary:
+            "Quando o Mongoid tenta definir um documento inverso de uma relação na memória,
+            ele precisa saber a qual relação pertence. Ao definir %{name}, o Mongoid procurou
+            na classe %{inverse} por uma relação correspondente, mas foram encontradas múltiplas
+            que poderiam corresponder: %{candidates}."
+          resolution: "Na relação %{name} em %{inverse}, você deve adicionar uma
+            opção :inverse_of para especificar a relação exata em %{klass} que é
+            o oposto de %{name}."
+        callbacks:
+          message: "Chamar %{method} em %{klass} resultou em um retorno falso de um callback."
+          summary:
+            "Se um callback 'before' retornar falso ao usar Document.create!,
+            Document#save! ou Document#update_attributes!, este erro será levantado,
+            pois o documento não foi salvo de fato."
+          resolution: "Verifique todos os callbacks 'before' para garantir que não
+            estão retornando falso acidentalmente."
+        calling_document_find_with_nil_is_invalid:
+          message: 'Chamar Document.find com nil é inválido.'
+          summary:
+            'Document.find espera que os parâmetros sejam 1 ou mais ids, e retornará um único documento
+            se 1 id for fornecido, caso contrário, um array de documentos se múltiplos ids forem fornecidos.'
+          resolution: 'Provavelmente isso é causado por passar parâmetros diretamente para o find,
+            e o parâmetro não está presente ou a chave da qual ele é acessado está incorreta.'
+        document_not_destroyed:
+          message: "%{klass} com id %{id} não foi destruído."
+          summary:
+            "Ao chamar %{klass}#destroy! e um callback interrompe a cadeia de callbacks de destruição
+            retornando um valor falso, a exclusão não ocorrerá de fato."
+          resolution:
+            "Verifique os callbacks 'before/after destroy' para garantir que os valores de retorno
+            sejam verdadeiros para que a cadeia continue."
+        document_not_found:
+          message: "Documento(s) não encontrado(s) para a classe %{klass} com id(s) %{missing}."
+          summary:
+            "Ao chamar %{klass}.find com um id ou array de ids, cada parâmetro deve corresponder
+            a um documento no banco de dados ou este erro será levantado. A busca foi pelo(s) id(s):
+            %{searched} (%{total} total) e os seguintes ids não foram encontrados: %{missing}."
+          resolution: 'Busque por um id que esteja no banco de dados ou configure a opção
+            Mongoid.raise_not_found_error para false, o que fará com que um nil seja retornado
+            em vez de levantar este erro ao buscar por um único id, ou apenas os documentos
+            correspondentes ao buscar por múltiplos.'
+        document_with_attributes_not_found:
+          message: "Documento não encontrado para a classe %{klass} com atributos %{attributes}."
+          summary:
+            "Ao chamar %{klass}.find_by com um hash de atributos, todos os atributos fornecidos
+            devem corresponder a um documento no banco de dados ou este erro será levantado."
+          resolution: 'Busque por atributos que estejam no banco de dados ou configure a opção
+            Mongoid.raise_not_found_error para false, o que fará com que um nil seja retornado
+            em vez de levantar este erro.'
+        eager_load:
+          message: "O carregamento antecipado :%{name} não é suportado, pois é uma relação
+            belongs_to polimórfica."
+          summary:
+            'O Mongoid não pode determinar atualmente as classes que precisa carregar antecipadamente
+            quando a relação é polimórfica. Os pais residem em diferentes coleções, então uma simples
+            busca por id não é suficiente.'
+          resolution: 'Não tente executar esta ação e tenha paciência, talvez isso seja suportado no futuro.'
+        invalid_collection:
+          message: "Acesso à coleção para %{klass} não é permitido."
+          summary: "%{klass}.collection foi chamado, e %{klass} é um documento embutido -
+            ele reside dentro da coleção do documento raiz da hierarquia."
+          resolution:
+            "Para acessar a coleção em que o documento embutido está, use %{klass}#_root.collection,
+            ou não tente persistir um documento embutido sem um pai definido."
+        in_memory_collation_not_supported:
+          message: "A opção de collation não pode ser aplicada ao consultar documentos na memória."
+          summary:
+            'A consulta sendo executada contra documentos na memória tem uma opção de collation definida.
+            Uma opção de collation é suportada apenas se a consulta for executada em um servidor MongoDB
+            com versão >= 3.4.'
+          resolution: 'Remova a opção de collation da consulta.'
+        invalid_config_option:
+          message: "Opção de configuração inválida: %{name}."
+          summary: "Uma opção de configuração inválida foi fornecida em seu mongoid.yml,
+            ou possivelmente há um erro de digitação. As opções de configuração válidas são: %{options}."
+          resolution: "Remova a opção inválida ou corrija o erro de digitação. Se você esperava que
+            a opção estivesse lá, consulte a seguinte página com relação à configuração do Mongoid:\n\n
+            \_\_http://mongoid.org/en/mongoid/docs/installation.html"
+        invalid_field:
+          message: "Definir um campo chamado '%{name}' não é permitido."
+          summary:
+            "Definir este campo sobrescreveria o método '%{name}', o que causaria problemas
+            com expectativas em torno do método original e causaria problemas extremamente
+            difíceis de depurar. O método original foi definido em:\n
+            \_\_Object: %{origin}\n
+            \_\_Arquivo: %{file}\n
+            \_\_Linha: %{line}"
+          resolution: 'Use Mongoid.destructive_fields para ver quais nomes não são permitidos,
+            e não use esses nomes. Isso inclui nomes que também conflitam com métodos básicos
+            do Ruby em Object, Module, Enumerable, ou gemas incluídas que injetam métodos
+            nesses ou internos do Mongoid.'
+        invalid_field_option:
+          message: "Opção inválida :%{option} fornecida para o campo :%{name}."
+          summary:
+            'O Mongoid exige que você forneça apenas opções válidas em cada definição de campo
+            para evitar comportamentos inesperados posteriormente.'
+          resolution:
+            "Ao definir o campo :%{name} em '%{klass}', forneça opções válidas para o campo.
+            Estas são atualmente: %{valid}. Se você pretende definir uma opção de campo personalizada,
+            faça isso primeiro assim:\n\n
+            \_\_Mongoid::Fields.option :%{option} do |model, field, value|\n
+            \_\_\_\_# Sua lógica aqui...\n
+            \_\_end\n
+            \_\_class %{klass}\n
+            \_\_\_\_include Mongoid::Document\n
+            \_\_\_\_field :%{name}, %{option}: true\n
+            \_\_end\n\n"
+        invalid_includes:
+          message: "Diretiva de includes inválida: %{klass}.includes(%{args})"
+          summary:
+            "O carregamento antecipado no Mongoid suporta apenas fornecer argumentos para %{klass}.includes
+            que são os nomes das relações no %{klass}."
+          resolution: "Certifique-se de que cada parâmetro passado para %{klass}.includes
+            é um nome válido de uma relação no modelo %{klass}. Estes são: %{relations}."
+        invalid_index:
+          message: "Especificação de índice inválida em %{klass}: %{spec}, %{options}"
+          summary:
+            'Os índices no Mongoid são definidos como um hash de pares de nome de campo e direção/2d,
+            com um hash para quaisquer opções adicionais.'
+          resolution: "Certifique-se de que o índice esteja em conformidade com a sintaxe correta
+            e tenha as opções corretas.\n\n
+            Opções válidas são:\n
+            \_\_background: true|false\n
+            \_\_database: 'nome_do_banco'\n
+            \_\_drop_dups: true|false\n
+            \_\_name: 'nome_do_índice'\n
+            \_\_sparse: true|false\n
+            \_\_unique: true|false\n
+            \_\_min: 1\n
+            \_\_max: 1\n
+            \_\_bits: 26\n
+            \_\_key: 26\n
+            \_\_bucket_size : 1\n
+            \_\_sphere_version : 1\n
+            \_\_text_version : 1\n
+            \_\_version : 1\n
+            \_\_weights: { content: 1, title: 2 }\n
+            \_\_expire_after_seconds: número_de_segundos\n
+            \_\_partial_filter_expression\n
+            \_\_storage_engine\n
+            \_\_language_override\n
+            \_\_default_language\n
+            \_\_collation: { locale: 'pt' }\n
+            \_\_hidden: true|false\n\n"
+        invalid_relation:
+          message: "Definir uma relação chamada '%{name}' não é permitido."
+          summary:
+            "Definir esta relação sobrescreveria o método '%{name}', o que causaria problemas
+            com expectativas em torno do método original e causaria problemas extremamente
+            difíceis de depurar. O método original foi definido em:\n
+            \_\_Object: %{origin}\n
+            \_\_Arquivo: %{file}\n
+            \_\_Linha: %{line}"
+          resolution: 'Use Mongoid.destructive_fields para ver quais nomes não são permitidos,
+            e não use esses nomes. Isso inclui nomes que também conflitam com métodos básicos
+            do Ruby em Object, Module, Enumerable, ou gemas incluídas que injetam métodos
+            nesses ou internos do Mongoid.'
+        invalid_scope:
+          message: "Definição de escopo inválida: %{name}: %{value}."
+          summary: 'A definição de escopos no Mongoid deve ser uma lâmbda.'
+          resolution:
+            "Ao definir um escopo no Mongoid, você deve fornecer uma lâmbda que será chamada
+            para gerar a criteria. Exemplo:\n\n
+            \_\_class %{klass}\n
+            \_\_\_\_include Mongoid::Document\n
+            \_\_\_\_scope :active, ->{ where(status: 'active') }\n
+            \_\_end\n\n"
+        mixed_relations:
+          message: 'Referenciar documentos embutidos via uma relação não é permitido.'
+          summary:
+            "Você definiu a relação %{name} no modelo %{klass}, mas %{name} está embutido.
+            É impossível referenciar diretamente um documento embutido desta maneira, pois
+            o Mongoid não pode determinar automaticamente em qual coleção procurar."
+          resolution: "Se você deseja continuar usando documentos embutidos, use relações
+            de documentos embutidos ou desinverta os relacionamentos de maneira que %{klass}
+            conheça seus pais."
+        no_default_client:
+          message: 'Nenhuma configuração de cliente padrão definida.'
+          summary:
+            'Você precisa definir um cliente padrão em seu arquivo de configuração mongoid.yml
+            para que o Mongoid saiba qual cliente usar na ausência de um fornecido explicitamente.'
+          resolution:
+            "Defina um cliente padrão em mongoid.yml.\n\n
+            \_\_clients:\n
+            \_\_\_\_default:\n
+            \_\_\_\_\_\_database: banco_de_dados\n
+            \_\_\_\_\_\_hosts:\n
+            \_\_\_\_\_\_\_\_- localhost:27017\n\n"
+        no_environment:
+          message: 'Nenhum ambiente definido no arquivo mongoid.yml.'
+          summary:
+            'Você precisa definir pelo menos um ambiente em seu arquivo de configuração mongoid.yml
+            para que o Mongoid saiba quais configurações carregar.'
+          resolution:
+            "Defina pelo menos um ambiente em mongoid.yml.\n\n
+            \_\_development:\n
+            \_\_\_\_clients:\n
+            \_\_\_\_\_\_default:\n
+            \_\_\_\_\_\_\_\_database: banco_de_dados\n
+            \_\_\_\_\_\_\_\_hosts:\n
+            \_\_\_\_\_\_\_\_\_\_\_- localhost:27017\n\n"
+        no_client_config:
+          message: "Nenhuma configuração de cliente encontrada para %{name}."
+          summary: 
+            "Você tentou acessar o cliente %{name}, mas não há configuração correspondente
+            definida em seu arquivo mongoid.yml."
+          resolution: "Defina uma configuração de cliente para %{name} em mongoid.yml.\n\n
+            \_\_clients:\n
+            \_\_\_\_default:\n
+            \_\_\_\_\_\_database: banco_de_dados\n
+            \_\_\_\_\_\_hosts:\n
+            \_\_\_\_\_\_\_\_- localhost:27017\n
+            \_\_\_\_#{name}:\n
+            \_\_\_\_\_\_database: outro_banco\n
+            \_\_\_\_\_\_hosts:\n
+            \_\_\_\_\_\_\_\_- localhost:27017\n\n"
+        no_clients_config:
+          message: 'Nenhuma configuração de clientes fornecida.'
+          summary: 
+            'Você deve fornecer pelo menos uma configuração de cliente em seu arquivo mongoid.yml
+            para que o Mongoid saiba a quais clientes se conectar.'
+          resolution: "Defina pelo menos uma configuração de cliente em mongoid.yml.\n\n
+            \_\_clients:\n
+            \_\_\_\_default:\n
+            \_\_\_\_\_\_database: banco_de_dados\n
+            \_\_\_\_\_\_hosts:\n
+            \_\_\_\_\_\_\_\_- localhost:27017\n\n"
+        no_client_database:
+          message: "Nenhum banco de dados especificado para %{name}."
+          summary:
+            'Você deve especificar um banco de dados para cada configuração de cliente
+            em seu arquivo mongoid.yml para que o Mongoid saiba a qual banco de dados se conectar.'
+          resolution: "Defina um banco de dados para %{name} em mongoid.yml.\n\n
+            \_\_clients:\n
+            \_\_\_\_default:\n
+            \_\_\_\_\_\_database: banco_de_dados\n
+            \_\_\_\_\_\_hosts:\n
+            \_\_\_\_\_\_\_\_- localhost:27017\n
+            \_\_\_\_#{name}:\n
+            \_\_\_\_\_\_database: outro_banco\n
+            \_\_\_\_\_\_hosts:\n
+            \_\_\_\_\_\_\_\_- localhost:27017\n\n"
+        no_client_hosts:
+          message: "Nenhum host fornecido para %{name}."
+          summary:
+            'Você deve fornecer pelo menos um host para cada configuração de cliente
+            em seu arquivo mongoid.yml para que o Mongoid saiba a quais servidores se conectar.'
+          resolution: "Defina pelo menos um host para %{name} em mongoid.yml.\n\n
+            \_\_clients:\n
+            \_\_\_\_default:\n
+            \_\_\_\_\_\_database: banco_de_dados\n
+            \_\_\_\_\_\_hosts:\n
+            \_\_\_\_\_\_\_\_- localhost:27017\n
+            \_\_\_\_#{name}:\n
+            \_\_\_\_\_\_database: outro_banco\n
+            \_\_\_\_\_\_hosts:\n
+            \_\_\_\_\_\_\_\_- localhost:27017\n\n"
+        invalid_storage_options:
+          message: "Opções de armazenamento inválidas fornecidas: %{options}."
+          summary:
+            'As opções fornecidas para a macro store_in são inválidas e não correspondem
+            às esperadas pelo Mongoid.'
+          resolution:
+            "Certifique-se de que as opções fornecidas para store_in estejam corretas e válidas.\n\n
+            Opções válidas são:\n
+            \_\_collection: nome_da_colecao\n
+            \_\_database: nome_do_banco\n
+            \_\_client: nome_do_cliente\n\n"
+        invalid_storage_parent:
+          message: "Chamada store_in inválida em %{klass}."
+          summary:
+            "Você tentou usar store_in em %{klass}, mas %{klass} não é um documento raiz.
+            store_in só pode ser usado em classes que incluem Mongoid::Document."
+          resolution: "Use store_in apenas em classes que incluem Mongoid::Document, não Mongoid::EmbeddedDocument.\n\n
+            \_\_class %{klass}\n
+            \_\_\_\_include Mongoid::Document\n
+            \_\_\_\_store_in collection: 'colecao', database: 'banco'\n
+            \_\_end\n\n"
+        no_parent:
+          message: 'Tentativa de persistir documento embutido sem um pai.'
+          summary:
+            'Você tentou persistir um documento embutido, mas ele não possui um documento pai,
+            o que é necessário para determinar a coleção e banco de dados corretos.'
+          resolution: "Certifique-se de que o documento embutido tenha um pai antes de tentar persistir.\n\n
+            \_\_class Parent\n
+            \_\_\_\_include Mongoid::Document\n
+            \_\_\_\_embeds_many :children\n
+            \_\_end\n\n
+            \_\_class Child\n
+            \_\_\_\_include Mongoid::EmbeddedDocument\n
+            \_\_end\n\n
+            \_\_parent = Parent.new\n
+            \_\_parent.children.build\n
+            \_\_parent.save\n\n"
+        nested_attributes_metadata_not_found:
+          message: "Metadados não encontrados para a relação %{name} ao processar atributos aninhados."
+          summary:
+            "Ao processar atributos aninhados para %{klass}, os metadados para a relação %{name}
+            não foram encontrados. Isso geralmente acontece quando você tenta definir atributos aninhados
+            para uma relação que não existe."
+          resolution:
+            "Certifique-se de que a relação %{name} esteja definida em %{klass} antes de tentar
+            definir atributos aninhados para ela.\n\n
+            \_\_class %{klass}\n
+            \_\_\_\_include Mongoid::Document\n
+            \_\_\_\_has_many :#{name}\n
+            \_\_\_\_accepts_nested_attributes_for :#{name}\n
+            \_\_end\n\n"
+        reject_if_block_missing:
+          message: "A opção reject_if para atributos aninhados em %{name} deve ser uma proc ou um símbolo."
+          summary:
+            "Você definiu reject_if para atributos aninhados em %{name} em %{klass},
+            mas forneceu um valor que não é uma proc ou um símbolo."
+          resolution:
+            "Defina reject_if como uma proc ou um símbolo que corresponde a um método
+            em %{klass}.\n\n
+            \_\_class %{klass}\n
+            \_\_\_\_include Mongoid::Document\n
+            \_\_\_\_has_many :#{name}\n
+            \_\_\_\_accepts_nested_attributes_for :#{name}, reject_if: ->(attrs){ ... }\n
+            \_\_end\n\n"
+        unknown_attribute:
+          message: "Atributo desconhecido: %{attribute}."
+          summary:
+            "Você tentou definir um atributo chamado %{attribute} em %{klass}, mas %{attribute}
+            não é um campo válido definido em %{klass}."
+          resolution: "Verifique a ortografia do atributo e certifique-se de que ele seja
+            definido como um campo em %{klass}.\n\n
+            \_\_class %{klass}\n
+            \_\_\_\_include Mongoid::Document\n
+            \_\_\_\_field :#{attribute}, type: String\n
+            \_\_end\n\n"
